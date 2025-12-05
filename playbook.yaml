@@ -15,6 +15,6 @@
     - name: Start the service
       become: True
       ansible.builtin.systemd:
-        name: main.service
+        name: myapp.service
         daemon_reload: true
         state: started
