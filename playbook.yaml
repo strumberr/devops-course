@@ -17,4 +17,4 @@
       ansible.builtin.systemd:
         name: myapp.service
         daemon_reload: true
-        state: started
+        state: restarted
