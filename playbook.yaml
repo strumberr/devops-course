@@ -8,9 +8,9 @@
     - name: Create a unit file
       become: True
       copy:
-        src: main.service
+        src: myapp.service
         dest: 
-          /etc/systemd/system/main.service
+          /etc/systemd/system/myapp.service
 
     - name: Start the service
       become: True
