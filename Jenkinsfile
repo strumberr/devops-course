@@ -7,9 +7,9 @@ pipeline {
 
     stages {
         stage('Test') {
-              steps {
-                   sh "go test ./..."
-              }
+            steps {
+                sh "go test ./..."
+            }
         }
         stage('Build') {
             steps {
@@ -17,11 +17,9 @@ pipeline {
             }
         }
         stage('Deploy') {
-          steps {
-              withCredentials([sshUserPrivateKey(credentialsId: 'mykey', keyFileVariable: 'FILENAME', usernameVariable: 'USERNAME')]) {
-                sh 'ansible-playbook --inventory hosts.ini --key-file ${FILENAME} playbook.yaml'
+            steps {
+                sh 'scp -o StrictHostKeyChecking=no main laborant@target:~'
             }
-          }
         }
     }
 }
