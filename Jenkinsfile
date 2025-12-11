@@ -18,7 +18,19 @@ pipeline {
         }
         stage('Build Docker Image') {
             steps {
-                sh "docker build . --tag myapp"
+                sh "docker build . --tag ttl.sh/myapp2:1h"
+            }
+        }
+        stage('Build Push Image') {
+            steps {
+                sh "docker push ttl.sh/myapp2:1h"
+            }
+        }
+        stage('Deploy to Kubernetes') {
+            steps {
+                 withKubeConfig([credentialsId: 'myapikey', serverUrl: 'https://kubernetes:6443']) {
+                  sh 'kubectl apply -f pod.yaml'
+                }
             }
         }
     }
