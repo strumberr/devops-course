@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     tools {
-        go "1.24.1"
+       go "1.24.1"
     }
 
     stages {
@@ -28,9 +28,8 @@ pipeline {
         stage('Push to ttl.sh') {
             steps {
                 sh '''
-                TAG=$(cat /proc/sys/kernel/random/uuid)
-                IMAGE="ttl.sh/$TAG:2h"
-                
+                IMAGE="ttl.sh/myapp:2h"
+
                 docker tag myapp:latest $IMAGE
                 docker push $IMAGE
 
@@ -39,9 +38,9 @@ pipeline {
             }
         }
 
-        stage('Show Image Location') {
+        stage('Show Image') {
             steps {
-                sh "echo 'Pushed image:' && cat image.txt"
+                sh "echo 'Image pushed:' && cat image.txt"
             }
         }
     }
