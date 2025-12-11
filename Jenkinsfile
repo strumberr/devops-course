@@ -25,16 +25,15 @@ pipeline {
         }
 
         stage('Push to ttl.sh') {
-    steps {
-        sh '''
-        TAG=$(cat /proc/sys/kernel/random/uuid)
-        docker tag myapp:latest ttl.sh/$TAG:2h
-        docker push ttl.sh/$TAG:2h
-        echo "IMAGE=ttl.sh/$TAG:2h" > image.txt
-        '''
-    }
-}
-
+            steps {
+                sh '''
+                TAG=$(cat /proc/sys/kernel/random/uuid)
+                docker tag myapp:latest ttl.sh/$TAG:2h
+                docker push ttl.sh/$TAG:2h
+                echo ttl.sh/$TAG:2h > image.txt
+                '''
+            }
+        }
 
         stage('Deploy to Docker VM') {
             steps {
@@ -46,5 +45,6 @@ pipeline {
                 '''
             }
         }
+
     }
 }
