@@ -28,23 +28,35 @@ pipeline {
             steps {
                 sh '''
                 TAG=$(cat /proc/sys/kernel/random/uuid)
-                docker tag myapp:latest ttl.sh/$TAG:2h
-                docker push ttl.sh/$TAG:2h
-                echo ttl.sh/$TAG:2h > image.txt
+                IMAGE="ttl.sh/$TAG:2h"
+
+                docker tag myapp:latest $IMAGE
+                docker push $IMAGE
+
+                echo $IMAGE > image.txt
                 '''
             }
         }
 
         stage('Deploy to Docker VM') {
             steps {
-                sh '''
-                IMAGE=$(cat image.txt)
-                docker rm -f myapp || true
-                docker pull $IMAGE
-                docker run -d -p 4444:4444 --name myapp $IMAGE
-                '''
+                sshagent(['sshkey']) {
+                    sh '''
+                    IMAGE=$(cat image.txt)
+
+                    # Remove old container on Docker VM
+                    ssh -o StrictHostKeyChecking=no laborant@docker "docker rm -f myapp || true"
+
+                    # Pull fresh image
+                    ssh -o StrictHostKeyChecking=no laborant@docker "docker pull $IMAGE"
+
+                    # Run container on port 4444
+                    ssh -o StrictHostKeyChecking=no laborant@docker "docker run -d -p 4444:4444 --name myapp $IMAGE"
+                    '''
+                }
             }
         }
+
 
     }
 }
