@@ -3,7 +3,7 @@ provider "aws" {
 }
 
 resource "aws_key_pair" "main" {
-  key_name   = "mykey3"
+  key_name   = "mykey"
   ## replace the key with the content from previous command
   public_key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIM1WfkeyDv3NatOS7lkPiKbdna08FTZk//8cboQrrTHI laborant@flexbox"
 }
